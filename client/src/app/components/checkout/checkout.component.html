@@ -1,0 +1,252 @@
+<section class="section-pagetop bg">
+  <div class="container">
+    <h2 class="title-page">Checkout Form</h2>
+  </div> <!-- container //  -->
+</section>
+<div class="container mt-3">
+  <div class="row">
+    <div class="col-md-4 order-md-2 mb-4">
+      <h4 class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-muted">Your Order</span>
+        <span class="badge badge-secondary badge-pill">{{totalQuantity}}</span>
+      </h4>
+      
+      
+      <ul class="list-group mb-3 mt-3">
+        <li class="list-group-item d-flex justify-content-between lh-condensed" *ngFor="let item of cartItems">
+          <div class="pull-left">
+            <h6 class="my-0">{{item.name}}</h6>
+            <small class="text-dark">Quantity : {{item.quantity}}</small>
+          </div>
+          <div class="ml-auto">
+            <span class="text-dark text-right">{{item.quantity*item.unitPrice | currency:'₹ '}}</span>
+          </div>
+        </li>
+        
+        <div class="card mb-3 mt-3">
+          <div class="card-body">
+            <form>
+              <div class="form-group">
+                <label>Have coupon?</label>
+                <div class="input-group">
+                  <input type="text" class="form-control" name="" placeholder="Coupon code">
+                  <span class="input-group-append">
+							<button class="btn btn-outline-dark">Apply</button>
+						</span>
+                </div>
+              </div>
+            </form>
+          </div> <!-- card-body.// -->
+        </div>  <!-- card .// -->
+
+        <li class="list-group-item d-flex justify-content-end">
+          <strong class="mr-auto">Discount</strong> <strong >
+            <del>{{totalPrice | currency:'₹ '}}</del>
+          </strong>
+        </li>
+        <li class="list-group-item d-flex justify-content-end">
+          <strong class="mr-auto">Total Price</strong> <strong >{{totalPrice | currency:'₹ '}}</strong>
+        </li>
+        <div class="card mt-3">
+          <button class="btn btn-outline-dark" (click)="onSubmit()">Continue to checkout</button>
+        </div>
+      </ul>
+    </div>
+    <div class="col-md-8 order-md-1">
+      <h4 class="mb-3">Customer Details</h4>
+      <form class="needs-validation" (ngSubmit)="onSubmit()" [formGroup]="checkoutFormGroup">
+        <div class="row" formGroupName="Customer">
+          <div class="col-md-6 mb-3">
+            <label for="firstName">First name</label>
+            <input type="text" class="form-control" id="firstName" required formControlName="firstName">
+            <div class="invalid-feedback">
+              Valid first name is required.
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="lastName">Last name</label>
+            <input type="text" class="form-control" id="lastName" required formControlName="lastName">
+            <div class="invalid-feedback">
+              Valid last name is required.
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="email">Email</label>
+            <input type="text" class="form-control" id="email" placeholder="you@example.com" required
+              formControlName="email">
+            <div class="invalid-feedback">
+              Valid Email is required.
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="phone">Phone Number</label>
+            <input type="text" class="form-control" id="phone" placeholder="Phone Number" required
+              formControlName="phone">
+            <div class="invalid-feedback">
+              Valid phone number is required.
+            </div>
+          </div>
+        </div>
+
+
+        <h4 class="mb-3">Shipping Address</h4>
+        <div class="row" formGroupName="ShippingAddress">
+          <div class="col-md-6 mb-3">
+            <label for="street1">Street</label>
+            <input type="text" class="form-control" id="street1" required formControlName="street">
+            <div class="invalid-feedback">
+              Valid Street is required.
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="city1">City</label>
+            <input type="text" class="form-control" id="city1" required formControlName="city">
+            <div class="invalid-feedback">
+              Valid City is required.
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="state1">State</label>
+            <input type="text" class="form-control" id="state1" required formControlName="state">
+            <div class="invalid-feedback">
+              Valid State is required.
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="country1">Country</label>
+            <input type="text" class="form-control" id="country1" required formControlName="country">
+            <div class="invalid-feedback">
+              Valid Country is required.
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="zipCode1">Zip Code</label>
+            <input type="text" class="form-control" id="zipCode1" required formControlName="zipCode">
+            <div class="invalid-feedback">
+              Valid zipCode is required.
+            </div>
+          </div>
+        </div>
+
+        <hr class="mb-4">
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" id="same-address"
+            (change)="copyShippingAddressToBillingAddress($event)">
+          <label class="custom-control-label" for="same-address">Billing Address is the same as my Shipping
+            Address</label>
+        </div>
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" id="save-info">
+          <label class="custom-control-label" for="save-info">Save this information for next time</label>
+        </div>
+        <hr class="mb-4">
+
+        <div [hidden]="sameBillingAddress">
+          <h4 class="mb-3">Billing Address</h4>
+          <div class="row" formGroupName="BillingAddress">
+            <div class="col-md-6 mb-3">
+              <label for="street">Street</label>
+              <input type="text" class="form-control" id="street" required formControlName="street">
+              <div class="invalid-feedback">
+                Valid Street is required.
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="city">City</label>
+              <input type="text" class="form-control" id="city" required formControlName="city">
+              <div class="invalid-feedback">
+                Valid City is required.
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="state">State</label>
+              <input type="text" class="form-control" id="state" required formControlName="state">
+              <div class="invalid-feedback">
+                Valid State is required.
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="country">Country</label>
+              <input type="text" class="form-control" id="country" required formControlName="country">
+              <div class="invalid-feedback">
+                Valid Country is required.
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="zipCode">Zip Code</label>
+              <input type="text" class="form-control" id="zipCode" required formControlName="zipCode">
+              <div class="invalid-feedback">
+                Valid zipCode is required.
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <h4 class="mb-3">Payment</h4>
+
+        <div class="d-block my-3">
+          <div class="custom-control custom-radio">
+            <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked required>
+            <label class="custom-control-label" for="credit">Credit card</label>
+          </div>
+          <div class="custom-control custom-radio">
+            <input id="debit" name="paymentMethod" type="radio" class="custom-control-input" required>
+            <label class="custom-control-label" for="debit">Debit card</label>
+          </div>
+          <div class="custom-control custom-radio">
+            <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required>
+            <label class="custom-control-label" for="paypal">PayPal</label>
+          </div>
+        </div>
+
+        <div class="row" formGroupName="CreditCard">
+          <div class="col-md-6 mb-3">
+            <label for="cc-name">Name on card</label>
+            <input type="text" class="form-control" id="cc-name" placeholder="" required formControlName="nameOnCard">
+            <small class="text-muted">Full name as displayed on card</small>
+            <div class="invalid-feedback">
+              Name on card is required
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="cc-number">Credit card number</label>
+            <input type="text" class="form-control" id="cc-number" placeholder="" required formControlName="cardNumber">
+            <div class="invalid-feedback">
+              Credit card number is required
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <label for="cc-expiration">Expiration Month</label>
+            <select class="form-control" id="cc-expiration" formControlName="expirationMonth" required>
+              <option [ngValue]="null">Please select value</option>
+              <option *ngFor="let month of creditCardMonths" [ngValue]="month">{{month}}</option>
+            </select>
+            <div class="invalid-feedback">
+              Expiration Month required
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <label for="cc-expiration-year">Expiration Year</label>
+            <select class="form-control" formControlName="expirationYear" id="cc-expiration-year"
+              (change)="handleMonthsYears()">
+              <option [ngValue]="null" selected="true">Please select value</option>
+              <option *ngFor="let year of creditCardYears">{{year}}</option>
+            </select>
+            <div class="invalid-feedback">
+              Expiration date required
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <label for="cc-cvv">CVV</label>
+            <input type="text" class="form-control" id="cc-cvv" required formControlName="securityCode">
+            <div class="invalid-feedback">
+              Security code required
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn-outline-dark mb-3" type="submit">Continue to checkout</button>
+      </form>
+    </div>
+  </div>

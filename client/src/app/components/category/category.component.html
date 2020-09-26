@@ -1,0 +1,63 @@
+<section class="section-content padding-y">
+	<div class="container">
+
+		<div class="row">
+			<main class="col-md-12">
+
+				<!-- loader -->
+				<div class="d-flex justify-content-center">
+					<div class="spinner-border" role="status" [hidden]="load">
+						<span class="sr-only">Loading...</span>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-4" *ngFor="let product of products">
+						<figure class="card card-product-grid">
+							<a routerLink="/product/{{product.id}}" class="img-wrap">
+								<img src="{{product.imageUrl}}">
+							</a> <!-- img-wrap.// -->
+							<figcaption class="info-wrap">
+								<div class="fix-height">
+									<a routerLink="/product/{{product.id}}" class="title">{{product.name}}</a>
+									<div class="price-wrap mt-2">
+										<span class="price">{{product.unitPrice | currency:'₹' }}</span>
+										<del class="price-old">{{product.unitPrice | currency:'₹'}}</del>
+									</div> <!-- price-wrap.// -->
+								</div>
+								<button class="btn btn-block btn-outline-dark" (click)="addToCart(product)">Add to cart
+								</button>
+							</figcaption>
+						</figure>
+					</div> <!-- col.// -->
+				</div>
+
+				<div class="alert alert-warning" *ngIf="products?.length==0">
+					No products found.
+				</div>
+
+				<div class="row mt-5">
+					<div class="col-md-3"></div>
+					<div class="col-md-5">
+						<ngb-pagination [(page)]="page" [(pageSize)]="pageSize" [collectionSize]="total" [maxSize]="10"
+							[boundaryLinks]="true" (pageChange)="listProducts()">
+						</ngb-pagination>
+					</div>
+					<div class="col-md-3 ml-5">
+						Page Size
+						<select (change)="updatePageSize($event.target.value)">
+							<option selected="true">5</option>
+							<option>10</option>
+							<option>20</option>
+							<option>50</option>
+						</select>
+					</div>
+				</div>
+
+
+			</main> <!-- col.// -->
+
+		</div>
+
+	</div> <!-- container .//  -->
+</section>
